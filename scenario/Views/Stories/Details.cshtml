@@ -1,0 +1,123 @@
+﻿@model scenario.Models.Story
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Story</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Title)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Title)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Description)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LeaderId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LeaderId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedAt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedAt)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UpdatedAt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedAt)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+
+
+
+<p>
+    @Html.ActionLink("Create New", "Create", "Threads")
+</p>
+
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Threads.First().Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Threads.First().Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Threads.First().Author.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Threads.First().StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Threads.First().StopDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Threads.First().Main)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Threads.First().CreatedAt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Threads.First().UpdatedAt)
+        </th>
+        <th></th>
+    </tr>   
+
+    @foreach (var item in Model.Threads.ToList())
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(Html.DisplayFor(modelItem => item.Title).ToString(), "Details", "Threads", new { id = item.ID }, new { })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StopDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Main)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedAt)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Threads", new { id = item.ID }, new { }) |
+                @Html.ActionLink("Details", "Details", "Threads", new { id = item.ID }, new { }) |
+                @Html.ActionLink("Delete", "Delete", "Threads", new { id = item.ID }, new { })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,68 @@
+﻿@model scenario.Models.Voting
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Voting</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Story.Title)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Story.Title)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Description)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Open)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Open)
+    </div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedAt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedAt)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UpdatedAt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedAt)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Threads)
+    </div>
+    <div class="display-field">
+        <ul>
+            @foreach (var Thread in Model.Threads)
+            {
+                <li>
+                    @Thread.Title
+                    Liczba głosów:@Model.Votes.Where(v => v.Thread == Thread).Count()
+                    
+                    @if (WebSecurity.IsAuthenticated && Model.Open && Model.Votes.Where(v => v.UserId == WebSecurity.CurrentUserId).Count() == 0)
+                    {
+                        @Html.ActionLink("Oddaj głos", "Vote", new { id = Model.ID, thread_id = Thread.ID })
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

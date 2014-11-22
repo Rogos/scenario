@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title — True Story</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div id="login">
+                    @Html.Partial("_LoginPartial")
+                </div>
+
+                <a id="logo" href="@Url.Action("Index", "Home")">
+                    <img alt="True Story" src="@Url.Content("~/Content/images/logo.png")">
+                </a>
+            </div>
+            <nav>
+                <ul id="menu">
+                    <li>@Html.ActionLink("Strona główna", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Opowiadania", "Index", "Stories")</li>
+                    <li>@Html.ActionLink("Wątki", "Index", "Threads")</li>
+                    <li>@Html.ActionLink("Postacie", "Index", "Characters")</li>
+                    <li>@Html.ActionLink("Relacje między postaciami", "Index", "CharacterRelations")</li>
+                    <li>@Html.ActionLink("Głosowania", "Index", "Votings")</li>
+                    @*
+                <li>@Html.ActionLink("Informacje", "About", "Home")</li>
+                <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
+                    *@
+                </ul>
+            </nav>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year — True Story</p>
+                </div>
+            </div>
+        </footer>
+
+        @Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

@@ -1,0 +1,116 @@
+﻿@model scenario.Models.Thread
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Thread</legend>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Story.Title)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Story.Title)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Author.UserName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Author.UserName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.StartDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.StartDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.StopDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.StopDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Title)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Title)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Description)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Text)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Text)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Selected)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Selected)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Main)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Main)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedAt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedAt)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UpdatedAt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedAt)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Parents)
+    </div>
+    <div class="display-field">
+        <ul>
+            @foreach (var Parent in Model.Parents)
+            {
+                <li>@Parent.Title</li>
+            }
+        </ul>
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Characters)
+    </div>
+    <div class="display-field">
+        <ul>
+            @foreach (var Character in Model.Characters)
+            {
+                <li>@Character.Name</li>
+            }
+        </ul>
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

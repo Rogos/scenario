@@ -1,0 +1,54 @@
+﻿@model scenario.Models.CharacterRelation
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>CharacterRelation</legend>
+
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Character1ID, "Character1")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Character1ID", String.Empty)
+            @Html.ValidationMessageFor(model => model.Character1ID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Description)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Description)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Character2ID, "Character2")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Character2ID", String.Empty)
+            @Html.ValidationMessageFor(model => model.Character2ID)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

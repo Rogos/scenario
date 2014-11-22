@@ -58,6 +58,7 @@ namespace scenario.Controllers
             {
                 character.CreatedAt = DateTime.Now;
                 character.UpdatedAt = DateTime.Now;
+                character.Selected = false;
                 if (ModelState.IsValid)
                 {
                     db.Characters.Add(character);
@@ -96,7 +97,7 @@ namespace scenario.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include = "ID, Name, Description")]Character character)
+        public ActionResult Edit([Bind(Include = "ID, Name, Description, Selected")]Character character)
         {
             if (ModelState.IsValid)
             {
@@ -105,6 +106,7 @@ namespace scenario.Controllers
                 {
                     c.Name = character.Name;
                     c.Description = character.Description;
+                    c.Selected = character.Selected;
                     c.UpdatedAt = DateTime.Now;
 
                     db.Entry(c).State = EntityState.Modified;

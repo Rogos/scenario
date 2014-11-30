@@ -16,7 +16,7 @@ namespace scenario.Controllers
     [InitializeSimpleMembership]
     public class ThreadsController : Controller
     {
-        private StoryDBContext db = new StoryDBContext();
+        private static StoryDBContext db = new StoryDBContext();
 
         //
         // GET: /Threads/
@@ -195,6 +195,7 @@ namespace scenario.Controllers
             Thread thread = db.Threads.Find(id);
             if (thread.AuthorId == WebSecurity.CurrentUserId)
             {
+                DeleteThread(id);
                 db.Threads.Remove(thread);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -203,9 +204,76 @@ namespace scenario.Controllers
                 return new HttpUnauthorizedResult();
         }
 
+        [NonAction]
+        [Authorize]
+        public static void DeleteThread(int id)
+        {
+            List<Vote> vl = new List<Vote>();
+            Thread thread = db.Threads.Find(id);
+            if (thread.AuthorId == WebSecurity.CurrentUserId)
+            {
+                foreach (Vote vote in db.Votes.Where(v => v.ThreadId == thread.ID))
+                {
+                    vl.Add(vote);
+                }
+                foreach(Vote vote in vl)
+                {
+                    db.Votes.Remove(vote);
+                }
+                db.SaveChanges();
+                List<Thread> tl = new List<Thread>();
+                foreach (Voting voting in db.Votings)
+                {
+                    bool mod = false;
+                    tl.Clear();
+                    foreach (Thread th in voting.Threads.Where(t => t.ID == thread.ID))
+                    {
+
+                        tl.Add(th);
+                    }
+                    foreach (Thread th in tl)
+                    {
+                        voting.Threads.Remove(th);
+                        mod = true;
+                    }
+                    if(mod)
+                        db.Entry(voting).State = EntityState.Modified;
+                }
+                db.SaveChanges();
+
+                foreach (Thread thr in db.Threads)
+                {
+                    bool mod = false;
+                    tl.Clear();
+                    foreach (Thread th in thr.Parents.Where(t => t.ID == thread.ID))
+                    {
+                        tl.Add(th);
+                    }
+                    foreach (Thread th in tl)
+                    {
+                        thr.Parents.Remove(th);
+                        mod = true;
+                    }
+                    
+                    tl.Clear();
+                    foreach (Thread th in thr.Children.Where(t => t.ID == thread.ID))
+                    {
+                        tl.Add(th);
+                    }
+                    foreach (Thread th in tl)
+                    {
+                        thr.Children.Remove(th);
+                        mod = true;
+                    }
+                    if (mod)
+                        db.Entry(thr).State = EntityState.Modified;
+                }
+                db.SaveChanges();
+            }
+        }
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            //db.Dispose();
             base.Dispose(disposing);
         }
     }

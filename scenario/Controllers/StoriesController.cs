@@ -145,12 +145,57 @@ namespace scenario.Controllers
             Story story = db.Stories.Find(id);
             if (story.LeaderId == WebSecurity.CurrentUserId)
             {
+                DeleteStory(id);
                 db.Stories.Remove(story);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             else return new HttpUnauthorizedResult();
         }
+
+        [NonAction]
+        [Authorize]
+        public void DeleteStory(int id)
+        {
+            Story story = db.Stories.Find(id);
+            if (story.LeaderId == WebSecurity.CurrentUserId)
+            {
+                List<Voting> lv = new List<Voting>();
+                foreach (Voting voting in db.Votings.Where(v => v.StoryId == story.ID))
+                {
+                    lv.Add(voting);
+                }
+                foreach (Voting v in lv)
+                {
+                    VotingsController.DeleteVoting(v.ID);
+                    db.Votings.Remove(v);
+                }
+                db.SaveChanges();
+                List<Thread> lt = new List<Thread>();
+                foreach (Thread th in story.Threads)
+                {
+                    lt.Add(th);
+                }
+                foreach (Thread th in lt)
+                {
+                    ThreadsController.DeleteThread(th.ID);
+                    db.Threads.Remove(th);
+                }
+                db.SaveChanges();
+                List<Character> lc = new List<Character>();
+                foreach (Character ch in story.Characters)
+                {
+                    lc.Add(ch);
+                }
+                foreach (Character ch in lc)
+                {
+                    CharactersController.DeleteCharacter(ch.ID);
+                    db.Characters.Remove(ch);
+                }
+                db.SaveChanges();
+            }
+        }
+
 
         public ActionResult Search(string searchString)
         {

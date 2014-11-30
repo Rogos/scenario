@@ -65,8 +65,8 @@ mark {
 h1, h2, h3,
 h4, h5, h6 {
     color: #000;
-    margin-bottom: 0;
-    padding-bottom: 0;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
 }
 
 h1 {
@@ -621,6 +621,10 @@ td {
 
 tr.pager td {
     padding: 0 0.25em 0 0;
+}
+
+table tr.inactive {
+    color: #dddddd !important;
 }
 
 

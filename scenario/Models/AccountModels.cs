@@ -21,6 +21,8 @@ namespace scenario.Models
     public class User
     {
         public int ID { get; set; }
+
+        [Display(Name = "Nazwa")]
         public string UserName { get; set; }
 
         public virtual ICollection<Story> Stories { get; set; }
@@ -66,7 +68,7 @@ namespace scenario.Models
         [Display(Name = "Hasło")]
         public string Password { get; set; }
 
-        [Display(Name = "Pamiętasz mnie?")]
+        [Display(Name = "Zapamiętaj mnie")]
         public bool RememberMe { get; set; }
     }
 

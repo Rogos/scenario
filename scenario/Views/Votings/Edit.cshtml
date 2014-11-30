@@ -1,10 +1,10 @@
 ﻿@model scenario.Models.Voting
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edycja głosowania";
 }
 
-<h2>Edit</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -16,7 +16,7 @@
         @Html.HiddenFor(model => model.ID)
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.StoryId, "Story")
+            @Html.LabelFor(model => model.Story)
         </div>
         <div class="editor-field">
             @Html.DropDownList("StoryId", String.Empty)
@@ -45,13 +45,13 @@
             @Html.ValidationMessageFor(model => model.Threads)
         </div>
         <p>
-            <input type="submit" value="Save" />
+            <input type="submit" value="Zapisz zmiany" />
         </p>
     </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Wróć do listy", "Index")
 </div>
 
 @section Scripts {

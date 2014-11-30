@@ -1,10 +1,10 @@
 ﻿@model scenario.Models.Story
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Opowiadanie | " + Model.Title;
 }
 
-<h2>Details</h2>
+<h2>Szczegóły opowiadania</h2>
 
 <fieldset>
     <legend>Story</legend>
@@ -24,10 +24,10 @@
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.LeaderId)
+         @Html.DisplayNameFor(model => model.Leader)
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.LeaderId)
+        @Html.DisplayFor(model => model.Leader.UserName)
     </div>
 
     <div class="display-label">
@@ -45,15 +45,16 @@
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edytuj", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Wróć do listy", "Index")
 </p>
 
 
 
+<h2>Wątki opowiadania</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", "Threads")
+    @Html.ActionLink("Utwórz nowy wątek", "Create", "Threads")
 </p>
 
 <table>
@@ -68,10 +69,7 @@
             @Html.DisplayNameFor(model => model.Threads.First().Author.UserName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Threads.First().StartDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Threads.First().StopDate)
+            @Html.DisplayNameFor(model => model.Threads.First().Selected)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Threads.First().Main)
@@ -98,10 +96,7 @@
                 @Html.DisplayFor(modelItem => item.Author.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StopDate)
+                @Html.DisplayFor(modelItem => item.Selected)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Main)
@@ -113,9 +108,9 @@
                 @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", "Threads", new { id = item.ID }, new { }) |
-                @Html.ActionLink("Details", "Details", "Threads", new { id = item.ID }, new { }) |
-                @Html.ActionLink("Delete", "Delete", "Threads", new { id = item.ID }, new { })
+                @Html.ActionLink("Edytuj", "Edit", "Threads", new { id = item.ID }, new { }) |
+                @Html.ActionLink("Więcej", "Details", "Threads", new { id = item.ID }, new { }) |
+                @Html.ActionLink("Usuń", "Delete", "Threads", new { id = item.ID }, new { })
             </td>
         </tr>
     }

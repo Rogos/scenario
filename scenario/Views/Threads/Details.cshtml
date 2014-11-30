@@ -1,10 +1,10 @@
 ﻿@model scenario.Models.Thread
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Wątek | " + Model.Title;
 }
 
-<h2>Details</h2>
+<h2>Szczegóły wątku</h2>
 
 <fieldset>
     <legend>Thread</legend>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.Author.UserName)
+         @Html.DisplayNameFor(model => model.Author)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Author.UserName)
@@ -111,6 +111,6 @@
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edytuj", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Wróć do listy", "Index")
 </p>

@@ -1,21 +1,21 @@
 ﻿@model IEnumerable<scenario.Models.Character>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Lista postaci";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Utwórz nową postać", "Create")
 </p>
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Story.Title)
+            @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Story)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Description)
@@ -32,13 +32,14 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
+@foreach (var item in Model)
+{
+    <tr class="@(!item.Selected ? "inactive" : "")">
         <td>
-            @Html.DisplayFor(modelItem => item.Story.Title)
+            @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", new { id = item.ID })
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.DisplayFor(modelItem => item.Story.Title)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
@@ -53,9 +54,9 @@
             @Html.DisplayFor(modelItem => item.UpdatedAt)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Edytuj", "Edit", new { id = item.ID }) |
+            @Html.ActionLink("Więcej", "Details", new { id = item.ID }) |
+            @Html.ActionLink("Usuń", "Delete", new { id = item.ID })
         </td>
     </tr>
 }

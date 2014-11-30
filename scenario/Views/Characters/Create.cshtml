@@ -1,10 +1,10 @@
 ﻿@model scenario.Models.Character
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Tworzenie postaci";
 }
 
-<h2>Create</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -14,7 +14,7 @@
         <legend>Character</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.StoryID, "Story")
+            @Html.LabelFor(model => model.Story)
         </div>
         <div class="editor-field">
             @Html.DropDownList("StoryID", String.Empty)
@@ -38,13 +38,13 @@
         </div>
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Utwórz" />
         </p>
     </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Wróć do listy", "Index")
 </div>
 
 @section Scripts {

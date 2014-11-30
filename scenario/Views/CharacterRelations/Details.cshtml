@@ -1,16 +1,16 @@
 ﻿@model scenario.Models.CharacterRelation
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Szczegóły relacji";
 }
 
-<h2>Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <fieldset>
     <legend>CharacterRelation</legend>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.Character1.Name)
+         @Html.DisplayNameFor(model => model.Character1)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Character1.Name)
@@ -24,7 +24,7 @@
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.Character2.Name)
+         @Html.DisplayNameFor(model => model.Character2)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Character2.Name)
@@ -45,6 +45,6 @@
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edytuj", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Wróć do listy", "Index")
 </p>

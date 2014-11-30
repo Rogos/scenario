@@ -1,10 +1,10 @@
 ﻿@model scenario.Models.Story
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Tworzenie opowiadania";
 }
 
-<h2>Create</h2>
+<h2>Tworzenie opowiadania</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -30,13 +30,13 @@
         </div>
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Utwórz" />
         </p>
     </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Wróć do listy", "Index")
 </div>
 
 @section Scripts {

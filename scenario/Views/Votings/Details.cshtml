@@ -1,16 +1,16 @@
 ﻿@model scenario.Models.Voting
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Szczegóły głosowania";
 }
 
-<h2>Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <fieldset>
     <legend>Voting</legend>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.Story.Title)
+         @Html.DisplayNameFor(model => model.Story)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Story.Title)
@@ -46,23 +46,27 @@
         @Html.DisplayNameFor(model => model.Threads)
     </div>
     <div class="display-field">
-        <ul>
+        <table>
+            <tr>
+                <th>Wątek</th><th>Liczba głosów</th><th></th>
+            </tr>
             @foreach (var Thread in Model.Threads)
             {
-                <li>
-                    @Thread.Title
-                    Liczba głosów:@Model.Votes.Where(v => v.Thread == Thread).Count()
-                    
-                    @if (WebSecurity.IsAuthenticated && Model.Open && Model.Votes.Where(v => v.UserId == WebSecurity.CurrentUserId).Count() == 0)
-                    {
-                        @Html.ActionLink("Oddaj głos", "Vote", new { id = Model.ID, thread_id = Thread.ID })
-                    }
-                </li>
+                <tr>
+                    <td>@Thread.Title</td>
+                    <td>@Model.Votes.Where(v => v.Thread == Thread).Count()</td>
+                    <td>
+                        @if (WebSecurity.IsAuthenticated && Model.Open && Model.Votes.Where(v => v.UserId == WebSecurity.CurrentUserId).Count() == 0)
+                        {
+                            @Html.ActionLink("Oddaj głos", "Vote", new { id = Model.ID, thread_id = Thread.ID })
+                        }
+                    </td>
+                </tr>
             }
-        </ul>
+        </table>
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edytuj", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Wróć do listy", "Index")
 </p>

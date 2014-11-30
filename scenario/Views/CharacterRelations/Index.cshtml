@@ -1,24 +1,24 @@
 ﻿@model IEnumerable<scenario.Models.CharacterRelation>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Lista relacji między postaciami";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Utwórz nową relację", "Create")
 </p>
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Character1.Name)
+            @Html.DisplayNameFor(model => model.Character1)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Character2.Name)
+            @Html.DisplayNameFor(model => model.Character2)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CreatedAt)
@@ -47,9 +47,9 @@
             @Html.DisplayFor(modelItem => item.UpdatedAt)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Edytuj", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Więcej", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Usuń", "Delete", new { id=item.ID })
         </td>
     </tr>
 }

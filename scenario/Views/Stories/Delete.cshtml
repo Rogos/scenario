@@ -1,12 +1,12 @@
 ﻿@model scenario.Models.Story
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Usuwanie opowiadania";
 }
 
-<h2>Delete</h2>
+<h2>@ViewBag.Title</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Czy na pewno chcesz usunąć to opowiadanie?</h3>
 <fieldset>
     <legend>Story</legend>
 
@@ -25,10 +25,10 @@
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.LeaderId)
+        @Html.DisplayNameFor(model => model.Leader)
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.LeaderId)
+        @Html.DisplayFor(model => model.Leader.UserName)
     </div>
 
     <div class="display-label">
@@ -48,7 +48,7 @@
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
+        <input type="submit" value="Usuń" /> |
+        @Html.ActionLink("Wróć do listy", "Index")
     </p>
 }

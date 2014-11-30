@@ -22,9 +22,15 @@ namespace scenario.Controllers
         // GET: /Threads/
 
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(string search)
         {
             var threads = db.Threads.Include(t => t.Author);
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                threads = threads.Where(t => t.Text.Contains(search));
+            }
+
             return View(threads.ToList());
         }
 

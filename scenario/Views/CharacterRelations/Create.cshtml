@@ -1,10 +1,10 @@
 ﻿@model scenario.Models.CharacterRelation
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Tworzenie relacji między postaciami";
 }
 
-<h2>Create</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -14,7 +14,7 @@
         <legend>CharacterRelation</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Character1ID, "Character1")
+            @Html.LabelFor(model => model.Character1)
         </div>
         <div class="editor-field">
             @Html.DropDownList("Character1ID", String.Empty)
@@ -30,7 +30,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Character2ID, "Character2")
+            @Html.LabelFor(model => model.Character2)
         </div>
         <div class="editor-field">
             @Html.DropDownList("Character2ID", String.Empty)
@@ -38,13 +38,13 @@
         </div>
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Utwórz" />
         </p>
     </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Wróć do listy", "Index")
 </div>
 
 @section Scripts {

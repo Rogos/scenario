@@ -13,7 +13,7 @@ namespace scenario.Controllers
 {
     public class VotingsController : Controller
     {
-        private StoryDBContext db = new StoryDBContext();
+        private static StoryDBContext db = new StoryDBContext();
 
         //
         // GET: /Votings/
@@ -158,12 +158,33 @@ namespace scenario.Controllers
             Voting voting = db.Votings.Find(id);
             if (db.Stories.Find(voting.StoryId).LeaderId == WebSecurity.CurrentUserId)
             {
+                DeleteVoting(id);
                 db.Votings.Remove(voting);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             else
                 return new HttpUnauthorizedResult();
+        }
+
+        [NonAction]
+        [Authorize]
+        public static void DeleteVoting(int id)
+        {
+            Voting voting = db.Votings.Find(id);
+            if (db.Stories.Find(voting.StoryId).LeaderId == WebSecurity.CurrentUserId)
+            {
+                List<Vote> vl = new List<Vote>();
+                foreach (Vote vote in db.Votes.Where(v => v.VotingId == voting.ID))
+                {
+                    vl.Add(vote);
+                }
+                foreach(Vote vote in vl)
+                {
+                    db.Votes.Remove(vote);
+                }
+                db.SaveChanges();
+            }
         }
 
         // GET: /Votings/Edit/5
@@ -190,7 +211,7 @@ namespace scenario.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            //db.Dispose();
             base.Dispose(disposing);
         }
     }

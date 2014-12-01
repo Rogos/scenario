@@ -1,12 +1,13 @@
 ﻿@model scenario.Models.Thread
 @{
     ViewBag.Title = "Tworzenie wątku";
-    
+
 }
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
@@ -73,10 +74,10 @@
             @Html.LabelFor(model => model.Text)
         </div>
         <div class="editor-field">
-            @Html.TextAreaFor(model => model.Text)
+            @Html.TextAreaFor(model => model.Text, 20, 25, null)
             @Html.ValidationMessageFor(model => model.Text)
         </div>
-            
+
         <div class="editor-label">
             @Html.LabelFor(model => model.Main)
         </div>

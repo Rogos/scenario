@@ -42,7 +42,7 @@ namespace scenario.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            ViewBag.StoryID = new SelectList(db.Stories, "ID", "Title");
+            ViewBag.StoryID = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title");
             return View();
         }
 
@@ -58,7 +58,6 @@ namespace scenario.Controllers
             {
                 character.CreatedAt = DateTime.Now;
                 character.UpdatedAt = DateTime.Now;
-                character.Selected = false;
                 if (ModelState.IsValid)
                 {
                     db.Characters.Add(character);
@@ -66,7 +65,7 @@ namespace scenario.Controllers
                     return RedirectToAction("Index");
                 }
 
-                ViewBag.StoryID = new SelectList(db.Stories, "ID", "Title", character.StoryID);
+                ViewBag.StoryID = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", character.StoryID);
                 return View(character);
             }
             else return new HttpUnauthorizedResult();
@@ -85,7 +84,7 @@ namespace scenario.Controllers
             if (db.Stories.Find(character.StoryID).LeaderId == WebSecurity.CurrentUserId)
             {
 
-                ViewBag.StoryID = new SelectList(db.Stories, "ID", "Title", character.StoryID);
+                ViewBag.StoryID = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", character.StoryID);
                 return View(character);
             }
             else return new HttpUnauthorizedResult();
@@ -116,7 +115,7 @@ namespace scenario.Controllers
                 }
                 else return new HttpUnauthorizedResult();
             }
-            ViewBag.StoryID = new SelectList(db.Stories, "ID", "Title", character.StoryID);
+            ViewBag.StoryID = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", character.StoryID);
             return View(character);
         }
 
@@ -173,12 +172,12 @@ namespace scenario.Controllers
                     {
                         cl.Add(ch);
                     }
-                    foreach(Character ch in cl)
+                    foreach (Character ch in cl)
                     {
                         th.Characters.Remove(ch);
                         mod = true;
                     }
-                    if(mod)
+                    if (mod)
                         db.Entry(th).State = EntityState.Modified;
                 }
                 db.SaveChanges();

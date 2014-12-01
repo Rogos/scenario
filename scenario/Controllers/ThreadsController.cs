@@ -49,14 +49,14 @@ namespace scenario.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult NameSearch(string name,int id=0)
+        public ActionResult NameSearch(string name, int id = 0)
         {
             Thread thread = db.Threads.Find(id);
             if (thread == null)
             {
                 return HttpNotFound();
             }
-            
+
             ViewBag.name = name;
             ViewBag.text = thread.Text;
             return View(thread);
@@ -113,7 +113,7 @@ namespace scenario.Controllers
             {
                 return HttpNotFound();
             }
-            if (thread.AuthorId == WebSecurity.CurrentUserId)
+            if ((thread.AuthorId == WebSecurity.CurrentUserId) || (thread.Story.LeaderId == WebSecurity.CurrentUserId))
             {
                 ViewBag.StoryId = new SelectList(db.Stories, "ID", "Title", thread.StoryId);
                 ViewBag.Characters = new MultiSelectList(db.Characters, "ID", "Name", thread.Characters.Select(s => s.ID));
@@ -130,10 +130,10 @@ namespace scenario.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Exclude = "Parents, Characters")]Thread thread, int[] Parents, int[] Characters)
+        public ActionResult Edit([Bind(Exclude = "Parents, Characters, AuthorId, CreatedAt, UpdatedAt")]Thread thread, int[] Parents, int[] Characters)
         {
             Thread t = db.Threads.Find(thread.ID);
-            if (t.AuthorId == WebSecurity.CurrentUserId)
+            if ((t.AuthorId == WebSecurity.CurrentUserId) || (t.Story.LeaderId == WebSecurity.CurrentUserId))
             {
                 if (ModelState.IsValid)
                 {
@@ -176,7 +176,7 @@ namespace scenario.Controllers
             {
                 return HttpNotFound();
             }
-            if (thread.AuthorId == WebSecurity.CurrentUserId)
+            if ((thread.AuthorId == WebSecurity.CurrentUserId) || (thread.Story.LeaderId == WebSecurity.CurrentUserId))
             {
                 return View(thread);
             }
@@ -193,7 +193,7 @@ namespace scenario.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Thread thread = db.Threads.Find(id);
-            if (thread.AuthorId == WebSecurity.CurrentUserId)
+            if ((thread.AuthorId == WebSecurity.CurrentUserId) || (thread.Story.LeaderId == WebSecurity.CurrentUserId))
             {
                 DeleteThread(id);
                 db.Threads.Remove(thread);
@@ -210,13 +210,13 @@ namespace scenario.Controllers
         {
             List<Vote> vl = new List<Vote>();
             Thread thread = db.Threads.Find(id);
-            if (thread.AuthorId == WebSecurity.CurrentUserId)
+            if ((thread.AuthorId == WebSecurity.CurrentUserId) || (thread.Story.LeaderId == WebSecurity.CurrentUserId))
             {
                 foreach (Vote vote in db.Votes.Where(v => v.ThreadId == thread.ID))
                 {
                     vl.Add(vote);
                 }
-                foreach(Vote vote in vl)
+                foreach (Vote vote in vl)
                 {
                     db.Votes.Remove(vote);
                 }
@@ -236,7 +236,7 @@ namespace scenario.Controllers
                         voting.Threads.Remove(th);
                         mod = true;
                     }
-                    if(mod)
+                    if (mod)
                         db.Entry(voting).State = EntityState.Modified;
                 }
                 db.SaveChanges();
@@ -254,7 +254,7 @@ namespace scenario.Controllers
                         thr.Parents.Remove(th);
                         mod = true;
                     }
-                    
+
                     tl.Clear();
                     foreach (Thread th in thr.Children.Where(t => t.ID == thread.ID))
                     {

@@ -105,7 +105,7 @@ namespace scenario.Controllers
         public ActionResult Edit([Bind(Exclude = "Threads")]Voting v, int[] Threads)
         {
             Voting voting = db.Votings.Find(v.ID);
-            
+
             if (db.Stories.Find(voting.StoryId).LeaderId == WebSecurity.CurrentUserId)
             {
                 if (ModelState.IsValid)
@@ -179,7 +179,7 @@ namespace scenario.Controllers
                 {
                     vl.Add(vote);
                 }
-                foreach(Vote vote in vl)
+                foreach (Vote vote in vl)
                 {
                     db.Votes.Remove(vote);
                 }

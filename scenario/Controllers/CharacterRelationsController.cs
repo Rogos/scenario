@@ -42,8 +42,8 @@ namespace scenario.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            ViewBag.Character1ID = new SelectList(db.Characters, "ID", "Name");
-            ViewBag.Character2ID = new SelectList(db.Characters, "ID", "Name");
+            ViewBag.Character1ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name");
+            ViewBag.Character2ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name");
             return View();
         }
 
@@ -77,8 +77,8 @@ namespace scenario.Controllers
                 else return new HttpUnauthorizedResult();
             }
 
-            ViewBag.Character1ID = new SelectList(db.Characters, "ID", "Name", characterrelation.Character1ID);
-            ViewBag.Character2ID = new SelectList(db.Characters, "ID", "Name", characterrelation.Character2ID);
+            ViewBag.Character1ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character1ID);
+            ViewBag.Character2ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character2ID);
             return View(characterrelation);
         }
 
@@ -95,8 +95,8 @@ namespace scenario.Controllers
             Character character1 = db.Characters.Find(characterrelation.Character1ID);
             if (db.Stories.Find(character1.StoryID).LeaderId == WebSecurity.CurrentUserId)
             {
-                ViewBag.Character1ID = new SelectList(db.Characters, "ID", "Name", characterrelation.Character1ID);
-                ViewBag.Character2ID = new SelectList(db.Characters, "ID", "Name", characterrelation.Character2ID);
+                ViewBag.Character1ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character1ID);
+                ViewBag.Character2ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character2ID);
                 return View(characterrelation);
             }
             else return new HttpUnauthorizedResult();
@@ -129,8 +129,8 @@ namespace scenario.Controllers
                 }
                 else return new HttpUnauthorizedResult();
             }
-            ViewBag.Character1ID = new SelectList(db.Characters, "ID", "Name", characterrelation.Character1ID);
-            ViewBag.Character2ID = new SelectList(db.Characters, "ID", "Name", characterrelation.Character2ID);
+            ViewBag.Character1ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character1ID);
+            ViewBag.Character2ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character2ID);
             return View(characterrelation);
         }
 

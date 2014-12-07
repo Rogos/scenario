@@ -94,14 +94,14 @@ namespace scenario.Controllers
         [Authorize]
         public ActionResult Edit(Story story)
         {
-            
-            
-                story.UpdatedAt = DateTime.Now;
-                if (ModelState.IsValid)
+
+
+            story.UpdatedAt = DateTime.Now;
+            if (ModelState.IsValid)
+            {
+                Story s = db.Stories.Find(story.ID);
+                if (s.LeaderId == WebSecurity.CurrentUserId)
                 {
-                    Story s = db.Stories.Find(story.ID);
-                    if (s.LeaderId == WebSecurity.CurrentUserId)
-                    {
                     s.Title = story.Title;
                     s.Description = story.Description;
                     s.UpdatedAt = DateTime.Now;
@@ -110,12 +110,12 @@ namespace scenario.Controllers
                     db.SaveChanges();
 
                     return RedirectToAction("Index");
-                    }
-                    else return new HttpUnauthorizedResult();
                 }
-                return View(story);
-            
-            
+                else return new HttpUnauthorizedResult();
+            }
+            return View(story);
+
+
         }
 
         //

@@ -161,8 +161,7 @@ namespace scenario.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             CharacterRelation characterrelation = db.CharacterRelations.Find(id);
-            Character character1 = db.Characters.Find(characterrelation.Character1ID);
-            if (db.Stories.Find(character1.StoryID).LeaderId == WebSecurity.CurrentUserId)
+            if (db.Stories.Find(characterrelation.Character1.StoryID).LeaderId == WebSecurity.CurrentUserId)
             {
                 db.CharacterRelations.Remove(characterrelation);
                 db.SaveChanges();

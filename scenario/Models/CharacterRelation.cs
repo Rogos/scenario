@@ -7,6 +7,7 @@ using System.Web;
 
 namespace scenario.Models
 {
+    [Table("CharacterRelations")]
     public class CharacterRelation
     {
         [Key]
@@ -17,7 +18,7 @@ namespace scenario.Models
         [Display(Name = "Opis")]
         public string Description { get; set; }
 
-        public int Character2ID { get; set; }
+        public int? Character2ID { get; set; }
 
         [Display(Name = "Utworzone")]
         public DateTime CreatedAt { get; set; }

@@ -11,42 +11,21 @@ namespace scenario.DAL
     public class StoryDBContext : DbContext
     {
         public DbSet<User> UserProfiles { get; set; }
-
         public DbSet<Story> Stories { get; set; }
         public DbSet<Character> Characters { get; set; }
-        public DbSet<CharacterRelation> CharacterRelations { get; set; }
         public DbSet<Thread> Threads { get; set; }
-        //public DbSet<ThreadCharacter> ThreadCharacters { get; set; }
-        //public DbSet<ThreadParent> ThreadParents { get; set; }
         public DbSet<Voting> Votings { get; set; }
         public DbSet<Vote> Votes { get; set; }
+        public DbSet<CharacterRelation> CharacterRelations { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            // relacje wiele do wielu
 
-            modelBuilder.Entity<CharacterRelation>()
-               .HasRequired(a => a.Character1)
-               .WithMany()
-               .HasForeignKey(u => u.Character1ID);
-
-            modelBuilder.Entity<CharacterRelation>()
-                .HasRequired(a => a.Character2)
-                .WithMany()
-                .HasForeignKey(u => u.Character2ID)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<ThreadCharacter>()
-                .HasRequired(t => t.Character)
-                .WithMany()
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<ThreadParent>()
-                .HasRequired(t => t.Parent)
-                .WithMany()
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Story>().HasMany(m => m.Threads).WithOptional(m => m.Story).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Character>()
+             .HasMany(t => t.CharacterRelations)
+             .WithRequired(t => t.Character1)
+             .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<Thread>()
              .HasMany(t => t.Parents)
@@ -62,6 +41,8 @@ namespace scenario.DAL
              .HasMany(t => t.Threads)
              .WithMany(t => t.Votings)
              .Map(t => t.MapLeftKey("VotingId").MapRightKey("ThreadId").ToTable("VotingVariants"));
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

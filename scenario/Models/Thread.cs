@@ -14,7 +14,7 @@ namespace scenario.Models
 
         public int? AuthorId { get; set; }
 
-        public int? StoryId { get; set; }
+        public int StoryId { get; set; }
 
         [Display(Name = "Początek wątku (czas)")]
         public string StartDate { get; set; }
@@ -22,6 +22,7 @@ namespace scenario.Models
         [Display(Name = "Koniec wątku (czas)")]
         public string StopDate { get; set; }
 
+        [Required]
         [Display(Name = "Tytuł")]
         public string Title { get; set; }
 

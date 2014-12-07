@@ -147,56 +147,12 @@ namespace scenario.Controllers
             Character character = db.Characters.Find(id);
             if (db.Stories.Find(character.StoryID).LeaderId == WebSecurity.CurrentUserId)
             {
-                DeleteCharacter(id);
                 db.Characters.Remove(character);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             else return new HttpUnauthorizedResult();
-        }
-
-        [NonAction]
-        [Authorize]
-        public static void DeleteCharacter(int id)
-        {
-            Character character = db.Characters.Find(id);
-            Story story = db.Stories.Find(character.StoryID);
-            List<Character> cl = new List<Character>();
-            if (story.LeaderId == WebSecurity.CurrentUserId)
-            {
-                foreach (Thread th in db.Threads)
-                {
-                    bool mod = false;
-                    cl.Clear();
-                    foreach (Character ch in th.Characters.Where(c => c.ID == character.ID))
-                    {
-                        cl.Add(ch);
-                    }
-                    foreach (Character ch in cl)
-                    {
-                        th.Characters.Remove(ch);
-                        mod = true;
-                    }
-                    if (mod)
-                        db.Entry(th).State = EntityState.Modified;
-                }
-                db.SaveChanges();
-                List<CharacterRelation> crl = new List<CharacterRelation>();
-                foreach (CharacterRelation cr in db.CharacterRelations)
-                {
-                    if ((cr.Character1ID == character.ID) || (cr.Character2ID == character.ID))
-                    {
-                        crl.Add(cr);
-                    }
-
-                }
-                foreach (CharacterRelation cr in crl)
-                {
-                    db.CharacterRelations.Remove(cr);
-                }
-                db.SaveChanges();
-            }
-        }
+        }        
 
         protected override void Dispose(bool disposing)
         {

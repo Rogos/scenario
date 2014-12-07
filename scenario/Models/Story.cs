@@ -11,6 +11,7 @@ namespace scenario.Models
     {
         public int ID { get; set; }
 
+        [Required]
         [Display(Name = "Tytuł")]
         public string Title { get; set; }
 
@@ -27,6 +28,7 @@ namespace scenario.Models
         
         public virtual ICollection<Thread> Threads { get; set; }
         public virtual ICollection<Character> Characters { get; set; }
+        public virtual ICollection<Voting> Votings { get; set; }
 
         [Display(Name = "Prowadzący")]
         [ForeignKey("LeaderId")]

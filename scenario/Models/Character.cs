@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -12,6 +13,7 @@ namespace scenario.Models
 
         public int StoryID { get; set; }
 
+        [Required]
         [Display(Name = "Nazwa")]
         public string Name { get; set; }
 
@@ -29,8 +31,9 @@ namespace scenario.Models
 
         [Display(Name = "Opowiadanie")]
         public virtual Story Story { get; set; }
-        //public virtual ICollection<CharacterRelation> CharacterRelations { get; set; }
 
+        [ForeignKey("Character1ID")]
+        public virtual ICollection<CharacterRelation> CharacterRelations { get; set; }
         public virtual ICollection<Thread> Threads { get; set; }
     }
 }

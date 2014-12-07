@@ -8,16 +8,6 @@ using System.Web.Security;
 
 namespace scenario.Models
 {
-    /*public class UsersContext : DbContext
-    {
-        public UsersContext()
-            : base("DefaultConnection")
-        {
-        }
-
-        
-    }*/
-
     public class User
     {
         public int ID { get; set; }

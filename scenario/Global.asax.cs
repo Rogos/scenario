@@ -1,4 +1,5 @@
-﻿using System;
+﻿using scenario.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,9 +11,6 @@ using WebMatrix.WebData;
 
 namespace scenario
 {
-    // Uwaga: aby uzyskać instrukcje włączania trybu klasycznego usług IIS6 lub IIS7, 
-    // odwiedź stronę http://go.microsoft.com/?LinkId=9394801
-
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
@@ -25,6 +23,7 @@ namespace scenario
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
             WebSecurity.InitializeDatabaseConnection("StoryDBContext", "Users", "ID", "UserName", autoCreateTables: true);
+            ModelBinders.Binders.DefaultBinder = new EmptyStringModelBaseBinder();
         }
     }
 }

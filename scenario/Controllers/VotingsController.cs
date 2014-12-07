@@ -55,24 +55,29 @@ namespace scenario.Controllers
         [Authorize]
         public ActionResult Create([Bind(Exclude = "Threads,CreatedAt, UpdatedAt")]Voting voting, int[] Threads)
         {
+            if (voting.Story != null && voting.Story.LeaderId != WebSecurity.CurrentUserId) return new HttpUnauthorizedResult();
+
             voting.CreatedAt = DateTime.Now;
             voting.UpdatedAt = DateTime.Now;
-            if (db.Stories.Find(voting.StoryId).LeaderId == WebSecurity.CurrentUserId)
-            {
-                if (ModelState.IsValid)
-                {
-                    if (Threads != null) foreach (var ThreadId in Threads) voting.Threads.Add(db.Threads.Find(ThreadId));
-                    db.Votings.Add(voting);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
 
-                ViewBag.StoryId = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.StoryId);
-                ViewBag.Threads = new MultiSelectList(db.Threads.Where(t => t.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.Threads.Select(t => t.ID));
-                return View(voting);
+            if (Threads != null) foreach (var id in Threads)
+                if (db.Threads.Find(id).StoryId != voting.StoryId)
+                {
+                    ModelState.AddModelError("Threads", "Wątki kandydujące muszą należeć do tego samego opowiadania co dane głosowanie.");
+                    break;
+                }
+                        
+            if (ModelState.IsValid)
+            {
+                if (Threads != null) foreach (var ThreadId in Threads) voting.Threads.Add(db.Threads.Find(ThreadId));
+                db.Votings.Add(voting);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            else
-                return new HttpUnauthorizedResult();
+
+            ViewBag.StoryId = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.StoryId);
+            ViewBag.Threads = new MultiSelectList(db.Threads.Where(t => t.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.Threads.Select(t => t.ID));
+            return View(voting);
         }
 
         //
@@ -106,27 +111,32 @@ namespace scenario.Controllers
         {
             Voting voting = db.Votings.Find(v.ID);
 
-            if (db.Stories.Find(voting.StoryId).LeaderId == WebSecurity.CurrentUserId)
-            {
-                if (ModelState.IsValid)
+            if ((v.Story != null && v.Story.LeaderId != WebSecurity.CurrentUserId) ||
+                voting.Story.LeaderId != WebSecurity.CurrentUserId) return new HttpUnauthorizedResult();
+
+            if (Threads != null) foreach (var id in Threads)
+                if (db.Threads.Find(id).StoryId != voting.StoryId)
                 {
-                    voting.UpdatedAt = DateTime.Now;
-                    voting.ID = v.ID;
-                    voting.CreatedAt = v.CreatedAt;
-                    voting.Description = v.Description;
-                    voting.Open = v.Open;
-                    voting.Threads.Clear();
-                    if (Threads != null) foreach (var ThreadId in Threads) voting.Threads.Add(db.Threads.Find(ThreadId));
-                    db.Entry(voting).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    ModelState.AddModelError("Threads", "Wątki kandydujące muszą należeć do tego samego opowiadania co dane głosowanie.");
+                    break;
                 }
-                ViewBag.StoryId = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.StoryId);
-                ViewBag.Threads = new MultiSelectList(db.Threads.Where(t => t.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.Threads.Select(t => t.ID));
-                return View(voting);
+
+            if (ModelState.IsValid)
+            {
+                voting.UpdatedAt = DateTime.Now;
+                voting.ID = v.ID;
+                voting.CreatedAt = v.CreatedAt;
+                voting.Description = v.Description;
+                voting.Open = v.Open;
+                voting.Threads.Clear();
+                if (Threads != null) foreach (var ThreadId in Threads) voting.Threads.Add(db.Threads.Find(ThreadId));
+                db.Entry(voting).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            else
-                return new HttpUnauthorizedResult();
+            ViewBag.StoryId = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.StoryId);
+            ViewBag.Threads = new MultiSelectList(db.Threads.Where(t => t.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.Threads.Select(t => t.ID));
+            return View(voting);
         }
 
         //

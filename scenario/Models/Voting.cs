@@ -11,6 +11,7 @@ namespace scenario.Models
     {
         public int ID { get; set; }
 
+        [Display(Name = "Opowiadanie")]
         public int StoryId { get; set; }
 
         [Display(Name = "Opis")]

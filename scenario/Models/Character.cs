@@ -11,7 +11,11 @@ namespace scenario.Models
     {
         public int ID { get; set; }
 
+        [Display(Name = "Opowiadanie")]
         public int StoryID { get; set; }
+
+        [Display(Name = "Autor")]
+        public int? AuthorId { get; set; }
 
         [Required]
         [Display(Name = "Nazwa")]
@@ -32,8 +36,19 @@ namespace scenario.Models
         [Display(Name = "Opowiadanie")]
         public virtual Story Story { get; set; }
 
+        [Display(Name = "Autor")]
+        [ForeignKey("AuthorId")]
+        public virtual User Author { get; set; }
+
         [ForeignKey("Character1ID")]
         public virtual ICollection<CharacterRelation> CharacterRelations { get; set; }
         public virtual ICollection<Thread> Threads { get; set; }
+
+        public Character()
+        {
+            CreatedAt = DateTime.Now;
+            UpdatedAt = DateTime.Now;
+            Selected = false;
+        }
     }
 }

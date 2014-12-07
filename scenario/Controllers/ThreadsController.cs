@@ -87,6 +87,21 @@ namespace scenario.Controllers
             thread.CreatedAt = DateTime.Now;
             thread.UpdatedAt = DateTime.Now;
             thread.Selected = false;
+
+            if (Parents != null) foreach (var id in Parents)
+                if (db.Threads.Find(id).StoryId != thread.StoryId)
+                {
+                    ModelState.AddModelError("Parents", "Wątki poprzedzające muszą należeć do tego samego opowiadania co dany wątek.");
+                    break;
+                }
+
+            if (Characters != null) foreach (var id in Characters)
+                if (db.Characters.Find(id).StoryID != thread.StoryId)
+                {
+                    ModelState.AddModelError("Characters", "Postacie muszą należeć do tego samego opowiadania co dany wątek.");
+                    break;
+                }
+
             if (ModelState.IsValid)
             {
                 if (Parents != null) foreach (var ParentId in Parents) thread.Parents.Add(db.Threads.Find(ParentId));
@@ -133,6 +148,21 @@ namespace scenario.Controllers
         public ActionResult Edit([Bind(Exclude = "Parents, Characters, AuthorId, CreatedAt, UpdatedAt")]Thread thread, int[] Parents, int[] Characters)
         {
             Thread t = db.Threads.Find(thread.ID);
+
+            if (Parents != null) foreach (var id in Parents)
+                    if (db.Threads.Find(id).StoryId != thread.StoryId)
+                    {
+                        ModelState.AddModelError("Parents", "Wątki poprzedzające muszą należeć do tego samego opowiadania co dany wątek.");
+                        break;
+                    }
+
+            if (Characters != null) foreach (var id in Characters)
+                    if (db.Characters.Find(id).StoryID != thread.StoryId)
+                    {
+                        ModelState.AddModelError("Characters", "Postacie muszą należeć do tego samego opowiadania co dany wątek.");
+                        break;
+                    }
+
             if ((t.AuthorId == WebSecurity.CurrentUserId) || (t.Story.LeaderId == WebSecurity.CurrentUserId))
             {
                 if (ModelState.IsValid)

@@ -55,26 +55,29 @@ namespace scenario.Controllers
         [Authorize]
         public ActionResult Create(CharacterRelation characterrelation)
         {
+            if ((characterrelation.Character1 != null && characterrelation.Character1.Story.LeaderId == WebSecurity.CurrentUserId)
+                || (characterrelation.Character2 != null && characterrelation.Character2.Story.LeaderId == WebSecurity.CurrentUserId))
+                return new HttpUnauthorizedResult();
+
+            var c1 = db.Characters.Find(characterrelation.Character1ID);
+            var c2 = db.Characters.Find(characterrelation.Character2ID);
+            if (c1 == null || c2 == null || c1.StoryID != c2.StoryID)
+                ModelState.AddModelError("Character2ID", "Obie postacie muszą należeć do tego samego opowiadania.");
+
             if (ModelState.IsValid)
             {
-                Character character1 = db.Characters.Find(characterrelation.Character1ID);
-                Character character2 = db.Characters.Find(characterrelation.Character2ID);
-                if ((character1.StoryID == character2.StoryID) && (db.Stories.Find(character1.StoryID).LeaderId == WebSecurity.CurrentUserId))
-                {
-                    CharacterRelation c = new CharacterRelation();
+                CharacterRelation c = new CharacterRelation();
 
-                    c.Character1ID = characterrelation.Character1ID;
-                    c.Description = characterrelation.Description;
-                    c.Character2ID = characterrelation.Character2ID;
-                    c.CreatedAt = DateTime.Now;
-                    c.UpdatedAt = DateTime.Now;
+                c.Character1ID = characterrelation.Character1ID;
+                c.Description = characterrelation.Description;
+                c.Character2ID = characterrelation.Character2ID;
+                c.CreatedAt = DateTime.Now;
+                c.UpdatedAt = DateTime.Now;
 
-                    db.CharacterRelations.Add(c);
-                    db.SaveChanges();
+                db.CharacterRelations.Add(c);
+                db.SaveChanges();
 
-                    return RedirectToAction("Index");
-                }
-                else return new HttpUnauthorizedResult();
+                return RedirectToAction("Index");
             }
 
             ViewBag.Character1ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character1ID);
@@ -92,8 +95,7 @@ namespace scenario.Controllers
             {
                 return HttpNotFound();
             }
-            Character character1 = db.Characters.Find(characterrelation.Character1ID);
-            if (db.Stories.Find(character1.StoryID).LeaderId == WebSecurity.CurrentUserId)
+            if (db.Stories.Find(characterrelation.Character1.StoryID).LeaderId == WebSecurity.CurrentUserId)
             {
                 ViewBag.Character1ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character1ID);
                 ViewBag.Character2ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character2ID);
@@ -110,24 +112,28 @@ namespace scenario.Controllers
         [Authorize]
         public ActionResult Edit(CharacterRelation characterrelation)
         {
+            if ((characterrelation.Character1 != null && characterrelation.Character1.Story.LeaderId == WebSecurity.CurrentUserId)
+                || (characterrelation.Character2 != null && characterrelation.Character2.Story.LeaderId == WebSecurity.CurrentUserId))
+                return new HttpUnauthorizedResult();
+
+            var c1 = db.Characters.Find(characterrelation.Character1ID);
+            var c2 = db.Characters.Find(characterrelation.Character2ID);
+            if (c1 == null || c2 == null || c1.StoryID != c2.StoryID)
+                ModelState.AddModelError("Character2ID", "Obie postacie muszą należeć do tego samego opowiadania.");
+
             if (ModelState.IsValid)
             {
                 CharacterRelation c = db.CharacterRelations.Find(characterrelation.ID);
-                Character character1 = db.Characters.Find(characterrelation.Character1ID);
-                Character character2 = db.Characters.Find(characterrelation.Character2ID);
-                if ((character1.StoryID == character2.StoryID) && (db.Stories.Find(character1.StoryID).LeaderId == WebSecurity.CurrentUserId))
-                {
-                    c.Character1ID = characterrelation.Character1ID;
-                    c.Description = characterrelation.Description;
-                    c.Character2ID = characterrelation.Character2ID;
-                    c.UpdatedAt = DateTime.Now;
+                
+                c.Character1ID = characterrelation.Character1ID;
+                c.Description = characterrelation.Description;
+                c.Character2ID = characterrelation.Character2ID;
+                c.UpdatedAt = DateTime.Now;
 
-                    db.Entry(c).State = EntityState.Modified;
-                    db.SaveChanges();
+                db.Entry(c).State = EntityState.Modified;
+                db.SaveChanges();
 
-                    return RedirectToAction("Index");
-                }
-                else return new HttpUnauthorizedResult();
+                return RedirectToAction("Index");
             }
             ViewBag.Character1ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character1ID);
             ViewBag.Character2ID = new SelectList(db.Characters.Where(c => c.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Name", characterrelation.Character2ID);

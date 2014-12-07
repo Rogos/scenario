@@ -13,11 +13,14 @@ namespace scenario.Models
         [Key]
         public int ID { get; set; }
 
+        [Required]
+        [Display(Name = "Postać 1")]
         public int Character1ID { get; set; }
 
         [Display(Name = "Opis")]
         public string Description { get; set; }
 
+        [Display(Name = "Postać 2")]
         public int? Character2ID { get; set; }
 
         [Display(Name = "Utworzone")]

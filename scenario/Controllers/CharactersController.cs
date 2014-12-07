@@ -52,23 +52,22 @@ namespace scenario.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create(Character character)
+        public ActionResult Create([Bind(Exclude = "AuthorId, CreatedAt, UpdatedAt, Selected")]Character character)
         {
-            if (db.Stories.Find(character.StoryID).LeaderId == WebSecurity.CurrentUserId)
-            {
-                character.CreatedAt = DateTime.Now;
-                character.UpdatedAt = DateTime.Now;
-                if (ModelState.IsValid)
-                {
-                    db.Characters.Add(character);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+            character.CreatedAt = DateTime.Now;
+            character.UpdatedAt = DateTime.Now;
+            character.AuthorId = WebSecurity.CurrentUserId;
+            character.Selected = character.Story.LeaderId == WebSecurity.CurrentUserId;
 
-                ViewBag.StoryID = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", character.StoryID);
-                return View(character);
+            if (ModelState.IsValid)
+            {
+                db.Characters.Add(character);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            else return new HttpUnauthorizedResult();
+
+            ViewBag.StoryID = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", character.StoryID);
+            return View(character);
         }
 
         //
@@ -101,19 +100,18 @@ namespace scenario.Controllers
             if (ModelState.IsValid)
             {
                 Character c = db.Characters.Find(character.ID);
-                if (db.Stories.Find(c.StoryID).LeaderId == WebSecurity.CurrentUserId)
-                {
-                    c.Name = character.Name;
-                    c.Description = character.Description;
-                    c.Selected = character.Selected;
-                    c.UpdatedAt = DateTime.Now;
 
-                    db.Entry(c).State = EntityState.Modified;
-                    db.SaveChanges();
+                if (c.Story.LeaderId != WebSecurity.CurrentUserId && c.AuthorId != WebSecurity.CurrentUserId) return new HttpUnauthorizedResult();
+                
+                c.Name = character.Name;
+                c.Description = character.Description;
+                c.Selected = character.Selected;
+                c.UpdatedAt = DateTime.Now;
 
-                    return RedirectToAction("Index");
-                }
-                else return new HttpUnauthorizedResult();
+                db.Entry(c).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
             }
             ViewBag.StoryID = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", character.StoryID);
             return View(character);
@@ -145,13 +143,12 @@ namespace scenario.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Character character = db.Characters.Find(id);
-            if (db.Stories.Find(character.StoryID).LeaderId == WebSecurity.CurrentUserId)
-            {
-                db.Characters.Remove(character);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            else return new HttpUnauthorizedResult();
+
+            if (character.Story.LeaderId != WebSecurity.CurrentUserId && character.AuthorId != WebSecurity.CurrentUserId) return new HttpUnauthorizedResult();
+            
+            db.Characters.Remove(character);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }        
 
         protected override void Dispose(bool disposing)

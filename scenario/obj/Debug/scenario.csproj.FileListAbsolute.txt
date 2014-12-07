@@ -287,6 +287,7 @@ C:\Users\jan\scenario\scenario\obj\Debug\scenario.dll
 C:\Users\jan\scenario\scenario\obj\Debug\scenario.pdb
 C:\Users\Rogos1\Documents\Visual Studio 2013\Projects\scenario\scenario\bin\EntityFramework.SqlServer.dll
 C:\Users\Rogos1\Documents\Visual Studio 2013\Projects\scenario\scenario\bin\EntityFramework.SqlServer.xml
-C:\Users\Rogos1\Documents\Visual Studio 2013\Projects\scenario\scenario\obj\Debug\scenario.csprojResolveAssemblyReference.cache
 C:\Users\Rogos1\Documents\Visual Studio 2013\Projects\scenario\scenario\obj\Debug\scenario.Migrations.fix1.resources
 C:\Users\Rogos1\Documents\Visual Studio 2013\Projects\scenario\scenario\obj\Debug\scenario.csproj.GenerateResource.Cache
+C:\Users\Rogos1\Documents\Visual Studio 2013\Projects\scenario\scenario\obj\Debug\scenario.Migrations.fix2.resources
+C:\Users\Rogos1\Documents\Visual Studio 2013\Projects\scenario\scenario\obj\Debug\scenario.csprojResolveAssemblyReference.cache

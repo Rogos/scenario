@@ -52,15 +52,16 @@ namespace scenario.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Exclude = "AuthorId, CreatedAt, UpdatedAt, Selected")]Character character)
+        public ActionResult Create([Bind(Exclude = "AuthorId, CreatedAt, UpdatedAt")]Character character)
         {
             character.CreatedAt = DateTime.Now;
             character.UpdatedAt = DateTime.Now;
             character.AuthorId = WebSecurity.CurrentUserId;
-            character.Selected = character.Story.LeaderId == WebSecurity.CurrentUserId;
+            //character.Selected = false;
 
             if (ModelState.IsValid)
             {
+                //character.Selected = db.Stories.Find(character.StoryID).LeaderId == WebSecurity.CurrentUserId;
                 db.Characters.Add(character);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -83,7 +84,6 @@ namespace scenario.Controllers
             if (db.Stories.Find(character.StoryID).LeaderId == WebSecurity.CurrentUserId)
             {
 
-                ViewBag.StoryID = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", character.StoryID);
                 return View(character);
             }
             else return new HttpUnauthorizedResult();
@@ -102,7 +102,7 @@ namespace scenario.Controllers
                 Character c = db.Characters.Find(character.ID);
 
                 if (c.Story.LeaderId != WebSecurity.CurrentUserId && c.AuthorId != WebSecurity.CurrentUserId) return new HttpUnauthorizedResult();
-                
+
                 c.Name = character.Name;
                 c.Description = character.Description;
                 c.Selected = character.Selected;
@@ -113,7 +113,6 @@ namespace scenario.Controllers
 
                 return RedirectToAction("Index");
             }
-            ViewBag.StoryID = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", character.StoryID);
             return View(character);
         }
 

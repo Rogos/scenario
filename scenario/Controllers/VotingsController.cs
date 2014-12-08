@@ -93,7 +93,6 @@ namespace scenario.Controllers
 
             if (db.Stories.Find(voting.StoryId).LeaderId == WebSecurity.CurrentUserId)
             {
-                ViewBag.StoryId = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.StoryId);
                 ViewBag.Threads = new MultiSelectList(db.Threads.Where(t => t.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.Threads.Select(t => t.ID));
                 return View(voting);
             }
@@ -107,7 +106,7 @@ namespace scenario.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Exclude = "Threads")]Voting v, int[] Threads)
+        public ActionResult Edit([Bind(Exclude = "StoryId,Threads")]Voting v, int[] Threads)
         {
             Voting voting = db.Votings.Find(v.ID);
 
@@ -134,7 +133,6 @@ namespace scenario.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.StoryId = new SelectList(db.Stories.Where(s => s.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.StoryId);
             ViewBag.Threads = new MultiSelectList(db.Threads.Where(t => t.Story.LeaderId == WebSecurity.CurrentUserId), "ID", "Title", voting.Threads.Select(t => t.ID));
             return View(voting);
         }

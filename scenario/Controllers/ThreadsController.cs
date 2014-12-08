@@ -130,7 +130,6 @@ namespace scenario.Controllers
             }
             if ((thread.AuthorId == WebSecurity.CurrentUserId) || (thread.Story.LeaderId == WebSecurity.CurrentUserId))
             {
-                ViewBag.StoryId = new SelectList(db.Stories, "ID", "Title", thread.StoryId);
                 ViewBag.Characters = new MultiSelectList(db.Characters, "ID", "Name", thread.Characters.Select(s => s.ID));
                 ViewBag.Parents = new MultiSelectList(db.Threads, "ID", "Title", thread.Parents.Select(s => s.ID));
                 return View(thread);
@@ -145,19 +144,19 @@ namespace scenario.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Exclude = "Parents, Characters, AuthorId, CreatedAt, UpdatedAt")]Thread thread, int[] Parents, int[] Characters)
+        public ActionResult Edit([Bind(Exclude = "StoryId, Parents, Characters, AuthorId, CreatedAt, UpdatedAt")]Thread thread, int[] Parents, int[] Characters)
         {
             Thread t = db.Threads.Find(thread.ID);
 
             if (Parents != null) foreach (var id in Parents)
-                    if (db.Threads.Find(id).StoryId != thread.StoryId)
+                    if (db.Threads.Find(id).StoryId != t.StoryId)
                     {
                         ModelState.AddModelError("Parents", "Wątki poprzedzające muszą należeć do tego samego opowiadania co dany wątek.");
                         break;
                     }
 
             if (Characters != null) foreach (var id in Characters)
-                    if (db.Characters.Find(id).StoryID != thread.StoryId)
+                    if (db.Characters.Find(id).StoryID != t.StoryId)
                     {
                         ModelState.AddModelError("Characters", "Postacie muszą należeć do tego samego opowiadania co dany wątek.");
                         break;
@@ -170,9 +169,15 @@ namespace scenario.Controllers
                     t.Title = thread.Title;
                     t.Description = thread.Description;
                     t.Text = thread.Text;
-                    t.Selected = thread.Selected;
+                    if (t.Story.LeaderId == WebSecurity.CurrentUserId)
+                    {
+                        t.Selected = thread.Selected;
+                    }
+                    else
+                    {
+                        t.Selected = false;
+                    }
                     t.Main = thread.Main;
-                    t.StoryId = thread.StoryId;
                     t.UpdatedAt = DateTime.Now;
                     t.Parents.Clear();
                     if (Parents != null) foreach (var ParentId in Parents) t.Parents.Add(db.Threads.Find(ParentId));
@@ -187,7 +192,6 @@ namespace scenario.Controllers
 
 
                 ViewBag.AuthorId = new SelectList(db.UserProfiles, "ID", "UserName", t.AuthorId);
-                ViewBag.StoryId = new SelectList(db.Stories, "ID", "Title", t.StoryId);
                 ViewBag.Characters = new MultiSelectList(db.Characters, "ID", "Name", t.Characters.Select(s => s.ID));
                 ViewBag.Parents = new MultiSelectList(db.Threads, "ID", "Title", t.Parents.Select(s => s.ID));
                 return View(thread);

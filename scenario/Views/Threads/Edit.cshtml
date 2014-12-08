@@ -16,12 +16,11 @@
 
         @Html.HiddenFor(model => model.ID)
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Story)
+        <div class="display-label">
+            @Html.DisplayNameFor(model => model.Story)
         </div>
-        <div class="editor-field">
-            @Html.DropDownList("StoryId", String.Empty)
-            @Html.ValidationMessageFor(model => model.StoryId)
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Story.Title)
         </div>
 
         <div class="editor-label">
@@ -82,7 +81,7 @@
         @{
     scenario.DAL.StoryDBContext db = new scenario.DAL.StoryDBContext();
         }
-        @if (db.Stories.Find(Model.StoryId).LeaderId == WebSecurity.CurrentUserId)
+        @if ((Model.StoryId!=0)&&(db.Stories.Find(Model.StoryId).LeaderId == WebSecurity.CurrentUserId))
         {
             <div class="editor-label">
                 @Html.LabelFor(model => model.Selected)
